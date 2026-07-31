@@ -1,0 +1,22 @@
+// Prisma schema for Identity Reconciliation service
+// Uses SQLite for simplicity; swap datasource to PostgreSQL for production
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Contact {
+  id             Int       @id @default(autoincrement())
+  phoneNumber    String?
+  email          String?
+  linkedId       Int?      // References another Contact's id (the primary)
+  linkPrecedence String    // "primary" | "secondary"
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime? // Soft-delete: null means active
+}
